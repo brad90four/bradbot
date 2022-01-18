@@ -1,15 +1,13 @@
 from nextcord import Embed
 from nextcord.ext import commands
 
-from bradbot import bot
-
 
 class Ping(commands.Cog):
     "Send an embed about the bot's ping."
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-    
+
     @commands.command(name="ping")
     async def ping(self, ctx: commands.Context) -> None:
         """Ping the bot to see its latency and state."""
@@ -19,6 +17,7 @@ class Ping(commands.Cog):
         )
 
         await ctx.send(embed=embed)
+
 
 def setup(bot: commands.Bot) -> None:
     """Load the Ping cog."""
