@@ -1,17 +1,12 @@
-import importlib
-import inspect
 import os
-import pkgutil
-from collections.abc import Iterator
 from pathlib import Path
-from typing import NoReturn
 
 import nextcord
 from dotenv import load_dotenv
 from loguru import logger
 from nextcord.ext import commands
 
-import exts
+from constants import walk_extensions
 
 path = Path(__file__)
 parent = path.parents[1]
@@ -44,35 +39,13 @@ bot = Bradbot(command_prefix="~", DEV_LOG=DEV_LOG)
 @bot.event
 async def on_ready():
     logger.info("'on_ready' event hit")
-
     devlog = bot.get_channel(bot.dev_log)
-    embed = nextcord.Embed(title="Bradbot", description="A small, personal Bradbot")
+    icon = bot.user.display_avatar.url
+
+    # embed = nextcord.Embed(title="Bradbot", description="Bradbot online", icon_url=icon)
+    embed = nextcord.Embed(description="Bradbot online")
+    embed.set_author(name=bot.name, icon_url=icon)
     await devlog.send(embed=embed)
-
-
-def unqualify(name: str) -> str:
-    """Return an unqualified name given a qualified module/package `name`."""
-    return name.rsplit(".", maxsplit=1)[-1]
-
-
-def walk_extensions() -> Iterator[str]:
-    """Yield extension names from the bot.exts subpackage."""
-
-    def on_error(name: str) -> NoReturn:
-        raise ImportError(name=name)  # pragma: no cover
-
-    for module in pkgutil.walk_packages(exts.__path__, f"{exts.__name__}.", onerror=on_error):
-        if unqualify(module.name).startswith("_"):
-            # Ignore module/package names starting with an underscore.
-            continue
-
-        if module.ispkg:
-            imported = importlib.import_module(module.name)
-            if not inspect.isfunction(getattr(imported, "setup", None)):
-                # If it lacks a setup function, it's not an extension.
-                continue
-
-        yield module.name
 
 
 for ext in walk_extensions():
