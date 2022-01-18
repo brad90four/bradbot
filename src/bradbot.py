@@ -1,19 +1,15 @@
-import asyncio
-import pkgutil
 import importlib
-import os
 import inspect
-import socket
-from aiohttp import AsyncResolver, ClientSession, TCPConnector
-from pathlib import Path
-from dotenv import load_dotenv
+import os
+import pkgutil
 from collections.abc import Iterator
+from pathlib import Path
 from typing import NoReturn
 
 import nextcord
-
-from nextcord.ext import commands
+from dotenv import load_dotenv
 from loguru import logger
+from nextcord.ext import commands
 
 import exts
 
@@ -22,6 +18,7 @@ parent = path.parents[1]
 load_dotenv(parent.joinpath(".env"))
 DEV_LOG = os.environ.get("DEV_LOG")
 
+
 class Bradbot(commands.Bot):
     """
     Bradbot core.
@@ -29,33 +26,8 @@ class Bradbot(commands.Bot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.http_session = ClientSession(
-        #     connector=TCPConnector(resolver=AsyncResolver(), family=socket.AF_INET)
-        # )
         self.name = "Bradbot"
         self.dev_log = int(DEV_LOG)
-        logger.debug(f"{self.dev_log = }")
-        #self.loop.create_task(self.send_log(title=self.name, details="Connected!"))
-
-
-    # async def send_log(self, title: str, details: str = None) -> None:
-    #     """Send an embed message to the devlog channel."""
-
-    #     devlog = self.get_channel(int(self.dev_log))
-    #     logger.debug(f"{devlog = }")
-    #     if not devlog:
-    #         logger.debug(f"'dev_log' channel not found: {self.dev_log}")
-    #         try:
-    #             devlog = await self.fetch_channel(os.environ.get("DEV_LOG"))
-    #         except nextcord.HTTPException as discord_exc:
-    #             logger.exception("Fetch failed", exc_info=discord_exc)
-    #             return
-
-
-    #     embed = nextcord.Embed(description=details)
-    #     embed.set_author(name=title)
-
-    #     await devlog.send(embed=embed)
 
     def add_cog(self, cog: commands.Cog) -> None:
         """
@@ -64,17 +36,14 @@ class Bradbot(commands.Bot):
         """
         super().add_cog(cog)
         logger.info(f"Cog loaded: {cog.qualified_name}")
-    
 
 
-
-bot = Bradbot(command_prefix="!", DEV_LOG=DEV_LOG)
+bot = Bradbot(command_prefix="~", DEV_LOG=DEV_LOG)
 
 
 @bot.event
 async def on_ready():
-    logger.debug("'on_ready' event hit")
-    logger.debug(f"{bot = }")
+    logger.info("'on_ready' event hit")
 
     devlog = bot.get_channel(bot.dev_log)
     embed = nextcord.Embed(title="Bradbot", description="A small, personal Bradbot")
@@ -84,6 +53,7 @@ async def on_ready():
 def unqualify(name: str) -> str:
     """Return an unqualified name given a qualified module/package `name`."""
     return name.rsplit(".", maxsplit=1)[-1]
+
 
 def walk_extensions() -> Iterator[str]:
     """Yield extension names from the bot.exts subpackage."""
@@ -103,6 +73,7 @@ def walk_extensions() -> Iterator[str]:
                 continue
 
         yield module.name
+
 
 for ext in walk_extensions():
     bot.load_extension(ext)

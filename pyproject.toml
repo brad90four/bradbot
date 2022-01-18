@@ -11,6 +11,10 @@ loguru = "^0.5.3"
 python-dotenv = "^0.19.2"
 aiohttp = "^3.8.1"
 aiodns = "^3.0.0"
+pre-commit = "^2.16.0"
+flake8 = "^4.0.1"
+black = "^21.12b0"
+isort = "^5.10.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -18,3 +22,20 @@ pytest = "^5.2"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 121
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
