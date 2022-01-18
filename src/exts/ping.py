@@ -1,3 +1,4 @@
+from loguru import logger
 from nextcord import Embed
 from nextcord.ext import commands
 
@@ -11,6 +12,7 @@ class Ping(commands.Cog):
     @commands.command(name="ping")
     async def ping(self, ctx: commands.Context) -> None:
         """Ping the bot to see its latency and state."""
+        logger.debug(f"Command `{ctx.invoked_with}` used by {ctx.author}.")
         embed = Embed(
             title=":ping_pong: Pong!",
             description=f"Gateway Latency: {round(self.bot.latency * 1000)}ms",

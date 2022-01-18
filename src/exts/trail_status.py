@@ -13,6 +13,7 @@ class TrailStatus(commands.Cog):
     @commands.command(name="trail_status", aliases=("trails", "trailstatus", "ts"))
     async def trail_status(self, ctx: commands.Context) -> None:
         """Get the current trail status."""
+        logger.debug(f"Command `{ctx.invoked_with}` used by {ctx.author}.")
         try:
             esnp_rss = feedparser.parse(
                 "https://parks.hamiltontn.gov/RSSFeed.aspx?ModID=63&CID=Enterprise-South-Nature-Park-Bike-Trails-8"
@@ -24,7 +25,7 @@ class TrailStatus(commands.Cog):
 
         updated_date = esnp_rss["entries"][0]["published"]
         status = esnp_rss["entries"][0]["title"]
-        logger.debug(f"{updated_date = }\n{status = }")
+        # logger.debug(f"{updated_date = }\n{status = }")
 
         embed = Embed(
             title="Trail Status for ESNP :man_mountain_biking:",
