@@ -31,6 +31,7 @@ class Extensions(commands.Cog):
     @extensions_group.command(name="reload", aliases=("r",), root_aliases=("reload",))
     async def reload_command(self, ctx: commands.Context, extension: Extension) -> None:
         """Reload extension."""
+        logger.debug(f"Command `{ctx.invoked_with}` used by {ctx.author}.")
         try:
             logger.debug(f"{extension = }")
             self.bot.reload_extension(extension)
