@@ -18,3 +18,8 @@ Running the bot locally
 -----------------------
 1. From the command line, ``cd`` to the ``src`` folder.
 2. Run ``py -m bradbot``
+
+Adding ``.gitmessage`` to commit template
+-----------------------------------------
+1. ``cd`` to the main folder of ``bradbot``
+2. ``git config --local commit.template ./.gitmessage``
