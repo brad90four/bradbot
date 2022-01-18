@@ -2,7 +2,7 @@
 name = "bradbot"
 version = "0.1.0"
 description = ""
-authors = ["bradtimmis <bradleytimmis@gmail.com>"]
+authors = ["brad90four 42116429+brad90four@users.noreply.github.com"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
