@@ -100,17 +100,9 @@ def read_data():
     pass
 
 
-def main():
-    """Command line interaction for listing activity, then plotting in 3D."""
-    list_activities()
-    activity = input("Enter target activity id: ")
-    altitude = {"altitude": get_altitude(activity)}
-    lat_long = {"lat_long": get_latlong(activity)}
-    # distance = {"distance": []}
-    # write_data(path, distance, altitude, lat_long)
-    X = [x[1] for x in lat_long["lat_long"]]
-    Y = [y[0] for y in lat_long["lat_long"]]
-    Z = [z for z in altitude["altitude"]]
+def animator(data: tuple[list[float], list[float], list[float]], id_number: str) -> None:
+    """Animate a 3D plot based on the input data and save with the id_number."""
+    X, Y, Z = data
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
 
@@ -123,11 +115,27 @@ def main():
         return (fig,)
 
     anim = FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
-    save_name = f"strava_vis_{activity}.gif"
+    save_name = f"strava_vis_{id_number}.gif"
     anim.save(save_name, writer=PillowWriter(fps=30))
-    # ax.plot(X, Y, Z)
-    # plt.show()
+
+
+def main():
+    """Command line interaction for listing activity, then plotting in 3D."""
+    list_activities()
+    activity = input("Enter target activity id: ")
+    altitude = {"altitude": get_altitude(activity)}
+    lat_long = {"lat_long": get_latlong(activity)}
+    # distance = {"distance": []}
+    # write_data(path, distance, altitude, lat_long)
+    X = [x[1] for x in lat_long["lat_long"]]
+    Y = [y[0] for y in lat_long["lat_long"]]
+    Z = [z for z in altitude["altitude"]]
+    animator((X, Y, Z), activity)
     logger.debug("Finished writing")
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.plot(X, Y, Z)
+    plt.show()
 
 
 def testing():
@@ -143,22 +151,11 @@ def testing():
     print(Y[:11])
     print(Z[:11])
     print(f"{len(X) = }\n{len(Y) = }\n{len(Z) = }")
+    animator((X, Y, Z), "test")
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    # ax.plot(X, Y, Z)
-    # plt.show()
-
-    def init():
-        ax.plot(X, Y, Z)
-        return (fig,)
-
-    def animate(i):
-        ax.view_init(elev=30.0, azim=i)
-        return (fig,)
-
-    anim = FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
-    save_name = "strava_vis.gif"
-    anim.save(save_name, writer=PillowWriter(fps=30))
+    ax.plot(X, Y, Z)
+    plt.show()
 
 
 if __name__ == "__main__":
