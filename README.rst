@@ -23,3 +23,7 @@ Adding ``.gitmessage`` to commit template
 -----------------------------------------
 1. ``cd`` to the main folder of ``bradbot``
 2. ``git config --local commit.template ./.gitmessage``
+
+Fun with the Strava API
+-----------------------
+.. image::  https://github.com/brad90four/bradbot/blob/main/strava_vis_6426581509.gif 
