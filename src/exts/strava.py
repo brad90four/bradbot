@@ -1,4 +1,6 @@
 # strava vis
+# http://www.strava.com/oauth/authorize?client_id=[REPLACE_WITH_YOUR_CLIENT_ID]&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read_all,activity:read_all
+# curl -X POST https://www.strava.com/oauth/token -F client_id=YOURCLIENTID -F client_secret=YOURCLIENTSECRET -F code=AUTHORIZATIONCODE -F grant_type=authorization_code # noqa: E501
 import json
 import os
 from pathlib import Path
@@ -8,12 +10,12 @@ import matplotlib.pyplot as plt
 import requests
 from dotenv import load_dotenv
 from loguru import logger
+from matplotlib.animation import FuncAnimation, PillowWriter
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 
 # import nextcord
 
 # from nextcord.ext import commands
-
 
 path = Path(__file__)
 parent = path.parents[2]
@@ -111,8 +113,21 @@ def main():
     Z = [z for z in altitude["altitude"]]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    ax.plot(X, Y, Z)
-    plt.show()
+
+    def init():
+        ax.plot(X, Y, Z)
+        return (fig,)
+
+    def animate(i):
+        ax.view_init(elev=30.0, azim=i)
+        return (fig,)
+
+    anim = FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
+    save_name = f"strava_vis_{activity}.gif"
+    anim.save(save_name, writer=PillowWriter(fps=30))
+    # ax.plot(X, Y, Z)
+    # plt.show()
+    logger.debug("Finished writing")
 
 
 def testing():
@@ -130,8 +145,20 @@ def testing():
     print(f"{len(X) = }\n{len(Y) = }\n{len(Z) = }")
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    ax.plot(X, Y, Z)
-    plt.show()
+    # ax.plot(X, Y, Z)
+    # plt.show()
+
+    def init():
+        ax.plot(X, Y, Z)
+        return (fig,)
+
+    def animate(i):
+        ax.view_init(elev=30.0, azim=i)
+        return (fig,)
+
+    anim = FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
+    save_name = "strava_vis.gif"
+    anim.save(save_name, writer=PillowWriter(fps=30))
 
 
 if __name__ == "__main__":
