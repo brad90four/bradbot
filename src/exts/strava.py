@@ -23,7 +23,7 @@ load_dotenv(parent.joinpath(".env"))
 STRAVA_TOKEN = os.environ.get("STRAVA_TOKEN")
 
 
-def get_athlete():
+def get_athlete() -> None:
     """Get athlete data"""
     athlete_url = "https://www.strava.com/api/v3/athlete"
     headers = {"accept": "application/json", "authorization": f"Bearer {STRAVA_TOKEN}"}
@@ -33,7 +33,7 @@ def get_athlete():
     pprint(response.json())
 
 
-def list_activities():
+def list_activities() -> None:
     """List athlete activities."""
     list_activities_url = "https://www.strava.com/api/v3/athlete/activities?per_page=30"
     headers = {"accept": "application/json", "authorization": f"Bearer {STRAVA_TOKEN}"}
@@ -47,7 +47,7 @@ def list_activities():
         print(f"{activity_description : <35}: {activity_id}")
 
 
-def get_distance(activity_id):
+def get_distance(activity_id: str) -> dict[str, list[float]]:
     """Get distance data from activity."""
     activity_stream = f"https://www.strava.com/api/v3/activities/{activity_id}/streams?keys=distance&key_by_type=true"
     headers = {"accept": "application/json", "authorization": f"Bearer {STRAVA_TOKEN}"}
@@ -58,7 +58,7 @@ def get_distance(activity_id):
     return response.json()["distance"]["data"]
 
 
-def get_altitude(activity_id):
+def get_altitude(activity_id: str) -> dict[str, list[float]]:
     """Get altitude data from activity."""
     activity_stream = f"https://www.strava.com/api/v3/activities/{activity_id}/streams?keys=altitude&key_by_type=true"
     headers = {"accept": "application/json", "authorization": f"Bearer {STRAVA_TOKEN}"}
@@ -69,7 +69,7 @@ def get_altitude(activity_id):
     return response.json()["altitude"]["data"]
 
 
-def get_latlong(activity_id):
+def get_latlong(activity_id: str) -> dict[str, list[list[float, float]]]:
     """Get latitude and longitude from activity."""
     latlong_url = f"https://www.strava.com/api/v3/activities/{activity_id}/streams?keys=latlng&key_by_type=true"
     headers = {"accept": "application/json", "authorization": f"Bearer {STRAVA_TOKEN}"}
@@ -80,7 +80,7 @@ def get_latlong(activity_id):
     return response.json()["latlng"]["data"]
 
 
-def write_data(path, dist_data, alt_data, latlng_data):
+def write_data(path, dist_data, alt_data, latlng_data) -> None:
     """Write activity data to a json file."""
     with open(f"{path.parents[0]}/strava_data.json", "w") as f:
         json.dump(dist_data, f)
@@ -91,7 +91,7 @@ def write_data(path, dist_data, alt_data, latlng_data):
         f.write("\n")
 
 
-def read_data():
+def read_data() -> None:
     """
     Read activity data from a json file.
 
@@ -119,7 +119,7 @@ def animator(data: tuple[list[float], list[float], list[float]], id_number: str)
     anim.save(save_name, writer=PillowWriter(fps=30))
 
 
-def main():
+def main() -> None:
     """Command line interaction for listing activity, then plotting in 3D."""
     list_activities()
     activity = input("Enter target activity id: ")
@@ -138,7 +138,7 @@ def main():
     plt.show()
 
 
-def testing():
+def testing() -> None:
     """Test `main` with a static activity ID."""
     altitude = {"altitude": get_altitude(6492923259)}
     lat_long = {"lat_long": get_latlong(6492923259)}
