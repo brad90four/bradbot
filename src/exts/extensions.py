@@ -2,7 +2,7 @@ from loguru import logger
 from nextcord.ext import commands
 
 import exts
-from constants import EXTENSIONS
+from util.constants import EXTENSIONS
 
 
 class Extension(commands.Converter):

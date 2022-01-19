@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from loguru import logger
 from nextcord.ext import commands
 
-from constants import walk_extensions
+from util.constants import walk_extensions
 
 path = Path(__file__)
 parent = path.parents[1]
@@ -49,7 +49,10 @@ async def on_ready():
 
 
 for ext in walk_extensions():
-    bot.load_extension(ext)
+    try:
+        bot.load_extension(ext)
+    except commands.errors.NoEntryPointError:
+        pass
 
 
 token = os.environ.get("TOKEN")
