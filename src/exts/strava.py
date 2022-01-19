@@ -37,7 +37,12 @@ def list_activities():
     response = requests.get(list_activities_url, headers=headers)
 
     print(f"{response.status_code = }")
-    pprint(response.json())
+    activities = response.json()
+    for i, activity in enumerate(activities):
+        activity_id = response.json()[i]["id"]
+        activity_description = response.json()[i]["name"]
+        print(f"{activity_description}: {activity_id}")
+    # pprint(response.json())
 
 
 def get_distance(activity_id):
@@ -94,19 +99,25 @@ def read_data():
 
 
 def main():
-    # get_athlete()
     list_activities()
     activity = input("Enter target activity id: ")
-    distance = {"distance": json.dumps(get_distance(activity))}
-    altitude = {"altitude": json.dumps(get_altitude(activity))}
-    lat_long = {"lat_long": json.dumps(get_latlong(activity))}
-    write_data(path, distance, altitude, lat_long)
+    altitude = {"altitude": get_altitude(activity)}
+    lat_long = {"lat_long": get_latlong(activity)}
+    # distance = {"distance": []}
+    # write_data(path, distance, altitude, lat_long)
+    X = [x[1] for x in lat_long["lat_long"]]
+    Y = [y[0] for y in lat_long["lat_long"]]
+    Z = [z for z in altitude["altitude"]]
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.plot(X, Y, Z)
+    plt.show()
 
 
 def testing():
-    # distance = {"distance": get_distance(6492923259)}
     altitude = {"altitude": get_altitude(6492923259)}
     lat_long = {"lat_long": get_latlong(6492923259)}
+    # distance = {"distance": get_distance(6492923259)}
     # write_data(path, distance, altitude, lat_long)
     X = [x[1] for x in lat_long["lat_long"]]
     Y = [y[0] for y in lat_long["lat_long"]]
@@ -122,5 +133,5 @@ def testing():
 
 
 if __name__ == "__main__":
-    # main()
-    testing()
+    main()
+    # testing()
