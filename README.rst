@@ -26,4 +26,4 @@ Adding ``.gitmessage`` to commit template
 
 Fun with the Strava API
 -----------------------
-.. image::  https://github.com/brad90four/bradbot/blob/main/strava_vis_6426581509.gif 
+.. image::  https://github.com/brad90four/bradbot/blob/main/src/exts/strava_vis_6463534976.gif 
