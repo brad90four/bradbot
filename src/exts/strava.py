@@ -17,6 +17,7 @@ from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 
 # from nextcord.ext import commands
 
+
 path = Path(__file__)
 parent = path.parents[2]
 load_dotenv(parent.joinpath(".env"))
@@ -100,11 +101,33 @@ def read_data() -> None:
     pass
 
 
+def latlng_to_feet(latlng: float) -> float:
+    """Convert latitude or longitude to feet."""
+    return latlng * 364488
+
+
+def feet_to_latlng(feet: float) -> float:
+    """Convert feet to decimal latitude / longitude."""
+    return feet / 364488
+
+
 def animator(data: tuple[list[float], list[float], list[float]], id_number: str) -> None:
     """Animate a 3D plot based on the input data and save with the id_number."""
     X, Y, Z = data
+    x_lim = min(X), max(X)
+    y_lim = min(Y), max(Y)
+    z_lim = min(Z), max(Z)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
+    ax.set_zlim3d(z_lim)
+    ax.set_box_aspect((1, 1, feet_to_latlng(1) * 100000))
+    ax.plot(X, Y, Z)
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+    ax.set_zlabel("Altitude")
+    ax.set_xticks(list(x_lim))
+    ax.set_yticks(list(y_lim))
+    ax.ticklabel_format(useOffset=False)
 
     def init():
         ax.plot(X, Y, Z)
@@ -117,6 +140,7 @@ def animator(data: tuple[list[float], list[float], list[float]], id_number: str)
     anim = FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
     save_name = f"strava_vis_{id_number}.gif"
     anim.save(save_name, writer=PillowWriter(fps=30))
+    plt.close()
 
 
 def main() -> None:
@@ -130,11 +154,23 @@ def main() -> None:
     X = [x[1] for x in lat_long["lat_long"]]
     Y = [y[0] for y in lat_long["lat_long"]]
     Z = [z for z in altitude["altitude"]]
+    x_lim = min(X), max(X)
+    y_lim = min(Y), max(Y)
+    z_lim = min(Z), max(Z)
     animator((X, Y, Z), activity)
     logger.debug("Finished writing")
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     ax.plot(X, Y, Z)
+    ax.set_zlim3d(z_lim)
+    ax.set_box_aspect((1, 1, feet_to_latlng(1) * 100000))
+    ax.plot(X, Y, Z)
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+    ax.set_zlabel("Altitude")
+    ax.set_xticks(list(x_lim))
+    ax.set_yticks(list(y_lim))
+    ax.ticklabel_format(useOffset=False)
     plt.show()
 
 
@@ -147,14 +183,31 @@ def testing() -> None:
     X = [x[1] for x in lat_long["lat_long"]]
     Y = [y[0] for y in lat_long["lat_long"]]
     Z = [z for z in altitude["altitude"]]
-    print(X[:11])
-    print(Y[:11])
-    print(Z[:11])
-    print(f"{len(X) = }\n{len(Y) = }\n{len(Z) = }")
+    x_lim = min(X), max(X)
+    y_lim = min(Y), max(Y)
+    z_lim = min(Z), max(Z)
+    # print(f"{X[:11] = }")
+    # print(f"{Y[:11] = }")
+    # print(f"{Z[:11] = }")
+    # print(f"{x_lim = }: {y_lim = }")
+    # print(f"x_range= {max(X) - min(X)}, y_range= {max(Y) - min(Y)}")
+    # print(f"{z_lim = }")
+    # print(f"z_range= {max(Z) - min(Z)}")
+    # print(f"{len(X) = }\n{len(Y) = }\n{len(Z) = }")
     animator((X, Y, Z), "test")
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
+
+    ax.set_zlim3d(z_lim)
+    ax.set_box_aspect((1, 1, feet_to_latlng(1) * 100000))
     ax.plot(X, Y, Z)
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+    ax.set_zlabel("Altitude")
+    ax.set_xticks(list(x_lim))
+    ax.set_yticks(list(y_lim))
+    ax.ticklabel_format(useOffset=False)
+
     plt.show()
 
 
