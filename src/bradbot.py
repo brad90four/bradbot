@@ -12,6 +12,7 @@ path = Path(__file__)
 parent = path.parents[1]
 load_dotenv(parent.joinpath(".env"))
 DEV_LOG = os.environ.get("DEV_LOG")
+TOKEN = os.environ.get("TOKEN")
 
 
 class Bradbot(commands.Bot):
@@ -39,13 +40,13 @@ bot = Bradbot(command_prefix="~", DEV_LOG=DEV_LOG)
 @bot.event
 async def on_ready():
     logger.info("'on_ready' event hit")
-    devlog = bot.get_channel(bot.dev_log)
+    devlog = bot.get_channel(bot.dev_log)  # noqa: F841
     icon = bot.user.display_avatar.url
 
-    # embed = nextcord.Embed(title="Bradbot", description="Bradbot online", icon_url=icon)
+    embed = nextcord.Embed(title="Bradbot", description="Bradbot online")
     embed = nextcord.Embed(description="Bradbot online")
     embed.set_author(name=bot.name, icon_url=icon)
-    await devlog.send(embed=embed)
+    # await devlog.send(embed=embed)
 
 
 for ext in walk_extensions():
@@ -55,5 +56,4 @@ for ext in walk_extensions():
         pass
 
 
-token = os.environ.get("TOKEN")
-bot.run(token)
+bot.run(TOKEN)
