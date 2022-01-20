@@ -42,7 +42,7 @@ Steps to work with the stand alone `strava.py`
 3. Approve the application on the prompt and wait for the redirect url to appear.
 4. When the redirect url is shown in your browser, copy the Authorization Code shown in it.
 
-   ``localhost/exchange_token?stat=&code=12345verylongcodehere12345&scope=read,activity:read_all,read_all``
+   ``localhost/exchange_token?stat=&code=`` **12345verylongcodehere12345** ``&scope=read,activity:read_all,read_all``
 
 5. Run the ``curl`` request with your Client ID, Client Secret and the Authorization Code from above in your terminal.
 
