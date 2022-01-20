@@ -48,8 +48,6 @@ def list_activities() -> dict:
         activity_description = activities[i]["name"]
         print(f"{activity_description : <35}: {activity_id}")
 
-    return activities
-
 
 def get_activities() -> dict:
     """List athlete activities."""
@@ -95,7 +93,7 @@ def get_latlong(activity_id: str) -> dict[str, list[list[float, float]]]:
     return response.json()["latlng"]["data"]
 
 
-def write_data(path, dist_data, alt_data, latlng_data) -> None:
+def write_data(path: str, dist_data: dict, alt_data: dict, latlng_data: dict) -> None:
     """Write activity data to a json file."""
     with open(f"{path.parents[0]}/strava_data.json", "w") as f:
         json.dump(dist_data, f)
@@ -183,11 +181,11 @@ def animator(data: tuple[list[float], list[float], list[float]], id_number: str)
 def main() -> None:
     """Command line interaction for listing activity, then plotting in 3D."""
     logger.debug("`main` starting")
-    _ = list_activities()
+    list_activities()
     activity = input("Enter target activity id: ")
     altitude = {"altitude": get_altitude(activity)}
     lat_long = {"lat_long": get_latlong(activity)}
-    # distance = {"distance": []}
+    # distance = {"distance": get_distance(activity)}
     # write_data(path, distance, altitude, lat_long)
     X = [x[1] for x in lat_long["lat_long"]]
     Y = [y[0] for y in lat_long["lat_long"]]
@@ -233,7 +231,7 @@ def all_rides() -> None:
     logger.debug("`all_rides` starting")
     all_activities = get_activities()
     for i in range(len(all_activities)):
-        name = all_activities[i]["name"]
+        name = all_activities[i]["name"].replace(" ", "_")
         logger.debug(f"Making vis for {name}")
         activity = all_activities[i]["id"]
         altitude = {"altitude": get_altitude(activity)}
@@ -248,5 +246,5 @@ def all_rides() -> None:
 
 if __name__ == "__main__":
     main()
-    # testing()
+    # testing(debug_option=True)
     # all_rides()
