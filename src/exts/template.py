@@ -1,6 +1,7 @@
 # extension template
 # imports at the top, will follow `isort` to keep the order
 from datetime import datetime
+from typing import Optional
 
 from loguru import logger
 from nextcord import Colour, Embed
@@ -16,8 +17,9 @@ class Template(commands.Cog):
         self.bot = bot
 
     # create a command using the @commands decorator
+    # doc info: https://nextcord.readthedocs.io/en/latest/ext/commands/api.html#commands
     @commands.command(name="template")
-    async def template(self, ctx: commands.Context) -> None:
+    async def template(self, ctx: commands.Context, *, user_input: Optional[str] = None) -> None:
         """
         Template command to show a simple extension script setup.
 
@@ -25,20 +27,26 @@ class Template(commands.Cog):
             ctx (commands.Context): A variable passed to the command using the context that it was called in.
         """
         # add a log statement to show helpful context items - use only for development
-        # ctx attributes: https://discordpy.readthedocs.io/en/stable/ext/commands/api.html#context
+        # ctx attributes: https://nextcord.readthedocs.io/en/latest/ext/commands/api.html#context
         # args, author, bot, channel, cog, command, command_failed, guild, invoked_parents,
         # invoked_subcommand, invoked_with, kwargs, me, message, prefix, subcommand_passed,
         # valid, voice_client
-        logger.debug(f"{ctx.args = }\n{ctx.author = }\n{ctx.channel = }\n{ctx.prefix = }")
+        logger.debug(f"{ctx.args = }\n{ctx.channel = }\n{ctx.prefix = }")
+
+        # can accept user input after the command invocation
+        logger.debug(
+            f"The user {ctx.author} passed the input "
+            f"{user_input if user_input else '`no-input-given`'} to the command."
+        )
 
         # create an Embed in order to send it to Discord
-        # Embed key word paramaters: https://discordpy.readthedocs.io/en/stable/api.html?highlight=embed#embed
+        # Embed key word paramaters: https://nextcord.readthedocs.io/en/latest/api.html#embed
         # title, type, description, url, timestamp, color
         embed = Embed(
             title="Template Command - Example Embed",
             type="rich",
             description="An embed to show what parameters can be used.",
-            url="https://discordpy.readthedocs.io/en/stable/api.html?highlight=embed#embed",
+            url="https://nextcord.readthedocs.io/en/latest/api.html#embed",
             timestamp=datetime.now(),
             color=Colour.random,
         )
