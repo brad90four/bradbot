@@ -36,7 +36,7 @@ class Template(commands.Cog):
         # can accept user input after the command invocation
         logger.debug(
             f"The user {ctx.author} passed the input "
-            f"{user_input if user_input else '`no-input-given`'} to the command."
+            f"{user_input if user_input else 'no-input-given'} to the command."
         )
 
         # create an Embed in order to send it to Discord
@@ -45,10 +45,11 @@ class Template(commands.Cog):
         embed = Embed(
             title="Template Command - Example Embed",
             type="rich",
-            description="An embed to show what parameters can be used.",
+            description="An embed to show what parameters can be used.\n"
+            f"Optional user_input: `{user_input if user_input else 'no-input-given'}`",
             url="https://nextcord.readthedocs.io/en/latest/api.html#embed",
             timestamp=datetime.now(),
-            color=Colour.random,
+            color=Colour.random(),
         )
 
         # send Embed to the context that invoked it
