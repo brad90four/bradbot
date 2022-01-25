@@ -13,6 +13,15 @@ Setup
 3. Run ``poetry shell``
 4. Run ``poetry install``
 5. Run ``pre-commit install``
+6. Have a ``.env`` file set up with the variables below:
+
+   - TOKEN
+   - SERVER
+   - DEV_LOG (channel ID for the on_ready event)
+   - CLIENT_ID (Strava Application ID)
+   - CLIENT_SECRET (Strava Application Secret)
+   - REFRESH_TOKEN (received after manually performing OAuth2 exchange)
+   - ACCESS_CODE (access token received after manually performing OAuth2 exchange)
 
 Running the bot locally
 -----------------------
@@ -51,3 +60,4 @@ Steps to work with the stand alone `strava.py`
 6. Use the ``access_token`` provided in the response as the ``.env`` variable ``STRAVA_TOKEN``.
 
 7. From the command line, run ``python strava.py`` from the ``\bradbot\src\exts\`` directory.
+8. When the access token expires, run ``~refresh_strava`` from the discord server to refresh your token.
