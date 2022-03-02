@@ -18,10 +18,6 @@ Setup
    - TOKEN
    - SERVER
    - DEV_LOG (channel ID for the on_ready event)
-   - CLIENT_ID (Strava Application ID)
-   - CLIENT_SECRET (Strava Application Secret)
-   - REFRESH_TOKEN (received after manually performing OAuth2 exchange)
-   - ACCESS_CODE (access token received after manually performing OAuth2 exchange)
 
 Running the bot locally
 -----------------------
@@ -32,32 +28,3 @@ Adding ``.gitmessage`` to commit template
 -----------------------------------------
 1. ``cd`` to the main folder of ``bradbot``
 2. ``git config --local commit.template ./.gitmessage``
-
-Fun with the Strava API
------------------------
-.. image::  https://github.com/brad90four/bradbot/blob/main/src/exts/strava_vis_6463534976.gif
-
-Steps to work with the stand alone `strava.py`
-====================================================
-1. Create a Strava Application
-
-    -  You will need your Client ID and Client Secret
-
-2. Copy the url
-
-   ``http://www.strava.com/oauth/authorize?client_id=[REPLACE_WITH_YOUR_CLIENT_ID]&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read_all,activity:read_all``
-
-   into your browser and place your Client ID in the placeholder.
-3. Approve the application on the prompt and wait for the redirect url to appear.
-4. When the redirect url is shown in your browser, copy the Authorization Code shown in it.
-
-   ``localhost/exchange_token?stat=&code=`` **12345verylongcodehere12345** ``&scope=read,activity:read_all,read_all``
-
-5. Run the ``curl`` request with your Client ID, Client Secret and the Authorization Code from above in your terminal.
-
-   ``curl -X POST https://www.strava.com/oauth/token -F client_id=YOURCLIENTID -F client_secret=YOURCLIENTSECRET -F code=AUTHORIZATIONCODE -F grant_type=authorization_code``
-
-6. Use the ``access_token`` provided in the response as the ``.env`` variable ``STRAVA_TOKEN``.
-
-7. From the command line, run ``python strava.py`` from the ``\bradbot\src\exts\`` directory.
-8. When the access token expires, run ``~refresh_strava`` from the discord server to refresh your token.
