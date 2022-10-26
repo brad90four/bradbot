@@ -5,7 +5,7 @@ from nextcord.ext import commands
 
 
 class TrailStatus(commands.Cog):
-    "Send an embed about the bot's ping."
+    """Send an embed about the bot's ping."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot

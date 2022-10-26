@@ -14,6 +14,9 @@ load_dotenv(parent.joinpath(".env"))
 DEV_LOG = os.environ.get("DEV_LOG")
 TOKEN = os.environ.get("TOKEN")
 
+intents = nextcord.Intents.default()
+intents.message_content = True
+
 
 class Bradbot(commands.Bot):
     """
@@ -34,7 +37,7 @@ class Bradbot(commands.Bot):
         logger.info(f"Cog loaded: {cog.qualified_name}")
 
 
-bot = Bradbot(command_prefix="~", DEV_LOG=DEV_LOG)
+bot = Bradbot(command_prefix="~", intents=intents)
 
 
 @bot.event
