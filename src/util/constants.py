@@ -1,10 +1,20 @@
 import importlib
 import inspect
+import os
 import pkgutil
 from collections.abc import Iterator
+from pathlib import Path
 from typing import NoReturn
 
+from dotenv import load_dotenv
+
 import exts
+
+path = Path(__file__)
+parent = path.parents[2]
+load_dotenv(parent.joinpath(".env"))
+GUILD_ID = os.environ.get("GUILD_ID")
+
 
 SOURCE_HOME_PAGE = "https://github.com/brad90four/bradbot"
 

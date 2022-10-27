@@ -1,15 +1,8 @@
-import os
-from pathlib import Path
-
-from dotenv import load_dotenv
 from loguru import logger
 from nextcord import Interaction, slash_command
 from nextcord.ext import commands
 
-path = Path(__file__)
-parent = path.parents[2]
-load_dotenv(parent.joinpath(".env"))
-GUILD_ID = os.environ.get("GUILD_ID")
+from util.constants import GUILD_ID
 
 
 class SlashTester(commands.Cog):
