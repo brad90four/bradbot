@@ -187,6 +187,7 @@ class Weather(commands.Cog):
     ):
         """Get the weather with some options"""
 
+        logger.debug(f"Command `{interaction.application_command}` used by {interaction.user}.")
         _country = _get_iso_country(country, debug) if country else ""
         lat_lon = _get_lat_lon(city, _country, debug)
         query_url = build_weather_query(lat_lon, forecast_days, units)
